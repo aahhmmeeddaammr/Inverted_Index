@@ -69,24 +69,27 @@ public class Index5 {
  
     //------------------osama-----------------------------
     public void buildIndex(String[] files) {  // from disk not from the internet
-        int fid = 0;
-        for (String fileName : files) {
-            try (BufferedReader file = new BufferedReader(new FileReader(fileName))) {
-                if (!sources.containsKey(fileName)) {
-                    sources.put(fid, new SourceRecord(fid, fileName, fileName, "notext"));
+        int fid = 0; // First document id
+        for (String fileName : files) {// looping over the files names
+            try (BufferedReader file = new BufferedReader(new FileReader(fileName))) {// reading each file content
+                if (!sources.containsKey(fileName)) {// checking if the file isn't stored in sources
+                    sources.put(fid, new SourceRecord(fid, fileName, fileName, "notext"));//adding the new file to sources
                 }
-                String ln;
-                int flen = 0;
-                while ((ln = file.readLine()) != null) {
+                String ln;//declaring a variable to store each line in each document
+                int flen = 0;//variable to store the length of words in each document
+                while ((ln = file.readLine()) != null) {//exit the loop when the file content ends
+
+                    flen+=indexOneLine(ln,fid);//sending each line in each file to be added to the index
+                    // and updating the length of words in the document
                     /// -2- **** complete here ****
                     ///**** hint   flen +=  ________________(ln, fid);
                 }
-                sources.get(fid).length = flen;
+                sources.get(fid).length = flen;//setting the length of the document
 
             } catch (IOException e) {
                 System.out.println("File " + fileName + " not found. Skip it");
             }
-            fid++;
+            fid++;//incrementing the document id
         }
         //   printDictionary();
     }
@@ -95,15 +98,16 @@ public class Index5 {
     public int indexOneLine(String ln, int fid) {
         int flen = 0;
 
-        String[] words = ln.split("\\W+");
-      //   String[] words = ln.replaceAll("(?:[^a-zA-Z0-9 -]|(?<=\\w)-(?!\\S))", " ").toLowerCase().split("\\s+");
-        flen += words.length;
+        String[] words = ln.split("\\W+");//splitting the line of words and storing it into an array of strings
+        //   String[] words = ln.replaceAll("(?:[^a-zA-Z0-9 -]|(?<=\\w)-(?!\\S))", " ").toLowerCase().split("\\s+");
+        flen += words.length;//adding the length of the words to the document length variable
         for (String word : words) {
             word = word.toLowerCase();
             if (stopWord(word)) {
                 continue;
             }
-            word = stemWord(word);
+            word = stemWord(word);//converting each word to the root of the word
+
             // check to see if the word is not in the dictionary
             // if not add it
             if (!index.containsKey(word)) {
@@ -226,7 +230,7 @@ public class Index5 {
 
     public void store(String storageName) {
         try {
-            String pathToStorage = "/home/ehab/tmp11/rl/"+storageName;
+            String pathToStorage = "C:\\\\Inverted Test\\\\Inverted Index\\\\"+storageName+".txt";
             Writer wr = new FileWriter(pathToStorage);
             for (Map.Entry<Integer, SourceRecord> entry : sources.entrySet()) {
                 System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().URL + ", Value = " + entry.getValue().title + ", Value = " + entry.getValue().text);

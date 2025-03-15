@@ -19,7 +19,7 @@ public class Test {
         Index5 index = new Index5();
         //|**  change it to your collection directory 
         //|**  in windows "C:\\tmp11\\rl\\collection\\"       
-        String files = "\"C:\\Users\\Ahmed\\Desktop\\New Text Document.txt\"";
+        String files = "C:\\\\Inverted Test\\\\";
 
         File file = new File(files);
         //|** String[] 	list()
@@ -36,17 +36,17 @@ public class Test {
         index.store("index");
         index.printDictionary();
 
-        String test3 = "data  should plain greatest comif"; // data  should plain greatest comif
-        System.out.println("Boo0lean Model result = \n" + index.find_24_01(test3));
-
-        String phrase = "";
-
-        do {
-            System.out.println("Print search phrase: ");
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            phrase = in.readLine();
-/// -3- **** complete here ****
-        } while (!phrase.isEmpty());
+//        String test3 = "data  should plain greatest comif"; // data  should plain greatest comif
+//        System.out.println("Boo0lean Model result = \n" + index.find_24_01(test3));
+//
+//        String phrase = "";
+//
+//        do {
+//            System.out.println("Print search phrase: ");
+//            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+//            phrase = in.readLine();
+///// -3- **** complete here ****
+//        } while (!phrase.isEmpty());
 
     }
 }
