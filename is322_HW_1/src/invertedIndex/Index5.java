@@ -42,18 +42,26 @@ public class Index5 {
 
 
     //---------------------menna-----------------
-    public void printPostingList(Posting p) {
+     public void printPostingList(Posting p) {
         // Iterator<Integer> it2 = hset.iterator();
         System.out.print("[");
         while (p != null) {
+            System.out.print(p.docId);   //print current element
+
             /// -4- **** complete here ****
-            // fix get rid of the last comma
-            System.out.print("" + p.docId + "," );
-            p = p.next;
+             // fix get rid of the last comma
+             
+             //check If there's another element after this, print comma
+            if (p.next != null) {      
+            System.out.print(",");
+        }
+           
+            // System.out.print("" + p.docId + "," );  -->  add a comma even after the last element
+
+            p = p.next; 
         }
         System.out.println("]");
     }
-
     //----------------------------------
     public void printDictionary() {
         Iterator it = index.entrySet().iterator();
