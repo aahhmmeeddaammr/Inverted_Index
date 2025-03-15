@@ -163,26 +163,41 @@ public class Index5 {
     Posting intersect(Posting pL1, Posting pL2) {
 ///****  -1-   complete after each comment ****
 //   INTERSECT ( p1 , p2 )
-//          1  answer ←      {}
-        Posting answer = null;
-        Posting last = null;
-//      2 while p1  != NIL and p2  != NIL
-     
-//          3 do if docID ( p 1 ) = docID ( p2 )
- 
-//          4   then ADD ( answer, docID ( p1 ))
-                // answer.add(pL1.docId);
- 
-//          5       p1 ← next ( p1 )
-//          6       p2 ← next ( p2 )
- 
- //          7   else if docID ( p1 ) < docID ( p2 )
-            
-//          8        then p1 ← next ( p1 )
-//          9        else p2 ← next ( p2 )
- 
-//      10 return answer
-        return answer;
+        //          1  answer ←      {}
+                Posting answer = null;
+                Posting last = null;
+        //      2 while p1  != NIL and p2  != NIL
+                while(pL1 != null && pL2 != null){
+        //          3 do if docID ( p 1 ) = docID ( p2 )
+                    if (pL1.docId == pL2.docId) {
+        //          4   then ADD ( answer, docID ( p1 ))
+                        // answer.add(pL1.docId);
+                        //posting is a linked list so move pointers to add new node
+                        Posting new_node = new Posting(pL1.docId);
+                        if (answer == null) {
+                            answer = new_node;
+                        }
+                        else {
+                            last.next = new_node;
+                        }
+                        last = new_node;
+        //          5       p1 ← next ( p1 )
+                        pL1 = pL1.next;
+        //          6       p2 ← next ( p2 )
+                        pL2 = pL2.next;
+                    }
+         //          7   else if docID ( p1 ) < docID ( p2 )
+                    else if(pL1.docId < pL2.docId) {
+        //          8        then p1 ← next ( p1 )
+                        pL1 = pL1.next;
+                    }
+                    else {
+        //          9        else p2 ← next ( p2 )
+                        pL2 = pL2.next;
+                    }
+                }
+        //      10 return answer
+                return answer;
     }
 
     public String find_24_01(String phrase) { // any mumber of terms non-optimized search 
