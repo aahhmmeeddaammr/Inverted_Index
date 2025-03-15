@@ -41,7 +41,7 @@ public class Index5 {
     }
 
 
-    //---------------------------------------------
+    //---------------------menna-----------------
     public void printPostingList(Posting p) {
         // Iterator<Integer> it2 = hset.iterator();
         System.out.print("[");
@@ -54,7 +54,7 @@ public class Index5 {
         System.out.println("]");
     }
 
-    //---------------------------------------------
+    //----------------------------------
     public void printDictionary() {
         Iterator it = index.entrySet().iterator();
         while (it.hasNext()) {
@@ -67,7 +67,7 @@ public class Index5 {
         System.out.println("*** Number of terms = " + index.size());
     }
  
-    //-----------------------------------------------
+    //------------------osama-----------------------------
     public void buildIndex(String[] files) {  // from disk not from the internet
         int fid = 0;
         for (String fileName : files) {
@@ -155,7 +155,7 @@ public class Index5 {
 //        return s.toString();
     }
 
-    //----------------------------------------------------------------------------  
+    //------------------Malak------------------------
     Posting intersect(Posting pL1, Posting pL2) {
 ///****  -1-   complete after each comment ****
 //   INTERSECT ( p1 , p2 )
