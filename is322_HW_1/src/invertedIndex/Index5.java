@@ -217,6 +217,10 @@ public class Index5 {
         Posting posting = index.get(words[0].toLowerCase()).pList;
         int i = 1;
         while (i < len) {
+            Boolean StopWord = stopWord(words[i]);
+            if (StopWord) {
+                continue;
+            }
             posting = intersect(posting, index.get(words[i].toLowerCase()).pList);
             i++;
         }
@@ -253,7 +257,7 @@ public class Index5 {
 
     public void store(String storageName) {
         try {
-            String pathToStorage = "C:\\\\Inverted Test\\\\Inverted Index\\\\"+storageName+".txt";
+            String pathToStorage = "C:\\Users\\Ahmed\\Desktop\\My Projects\\Information Retrieval\\is322_HW_1\\is322_HW_1\\"+storageName+".txt";
             Writer wr = new FileWriter(pathToStorage);
             for (Map.Entry<Integer, SourceRecord> entry : sources.entrySet()) {
                 System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue().URL + ", Value = " + entry.getValue().title + ", Value = " + entry.getValue().text);
