@@ -17,8 +17,8 @@ public class Test {
 
     public static void main(String args[]) throws IOException {
         Index5 index = new Index5();
-        //|**  change it to your collection directory 
-        //|**  in windows "C:\\tmp11\\rl\\collection\\"       
+        //|**  change it to your collection directory
+        //|**  in windows "C:\\tmp11\\rl\\collection\\"
         String files = "C:\\tmp11\\rl\\collection\\";
 
         File file = new File(files);
@@ -45,7 +45,7 @@ public class Test {
                 String x = index.find_24_01(phrase);
                 System.out.println("Boo0lean Model result = \n" + x);
             }catch (Exception ex){
-                System.out.println("\n" + "phrase Not Found");
+                System.out.println( "Phrase Not Found\n");
             }
        } while (!phrase.isEmpty());
     }

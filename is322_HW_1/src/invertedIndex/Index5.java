@@ -1,23 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package invertedIndex;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import static java.lang.Math.log10;
-import static java.lang.Math.sqrt;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.io.PrintWriter;
-
 /**
  *
  * @author ehab
@@ -41,7 +30,10 @@ public class Index5 {
     }
 
 
-    //---------------------menna-----------------
+    /**
+     * Prints the posting list for a given term.
+     * @param p The head of the posting list.
+     */
      public void printPostingList(Posting p) {
         // Iterator<Integer> it2 = hset.iterator();
         System.out.print("[");
@@ -50,19 +42,22 @@ public class Index5 {
 
             /// -4- **** complete here ****
              // fix get rid of the last comma
-             
+
              //check If there's another element after this, print comma
-            if (p.next != null) {      
+            if (p.next != null) {
             System.out.print(",");
         }
-           
+
             // System.out.print("" + p.docId + "," );  -->  add a comma even after the last element
 
-            p = p.next; 
+            p = p.next;
         }
         System.out.println("]");
     }
-    //----------------------------------
+
+    /**
+     * Prints the entire dictionary along with document frequency and posting lists.
+     */
     public void printDictionary() {
         Iterator it = index.entrySet().iterator();
         while (it.hasNext()) {
@@ -74,8 +69,11 @@ public class Index5 {
         System.out.println("------------------------------------------------------");
         System.out.println("*** Number of terms = " + index.size());
     }
- 
-    //------------------osama-----------------------------
+
+    /**
+     * Builds the index by processing a set of files.
+     * @param files Array of file paths.
+     */
     public void buildIndex(String[] files) {  // from disk not from the internet
         int fid = 0; // First document id
         for (String fileName : files) {// looping over the files names
@@ -102,7 +100,12 @@ public class Index5 {
         //   printDictionary();
     }
 
-    //----------------------------------------------------------------------------  
+    /**
+     * Indexes a single line from a document.
+     * @param ln Line of text.
+     * @param fid Document ID.
+     * @return Number of words in the line.
+     */
     public int indexOneLine(String ln, int fid) {
         int flen = 0;
 
@@ -123,7 +126,7 @@ public class Index5 {
             }
             // add document id to the posting list
             if (!index.get(word).postingListContains(fid)) {
-                index.get(word).doc_freq += 1; //set doc freq to the number of doc that contain the term 
+                index.get(word).doc_freq += 1; //set doc freq to the number of doc that contain the term
                 if (index.get(word).pList == null) {
                     index.get(word).pList = new Posting(fid);
                     index.get(word).last = index.get(word).pList;
@@ -145,8 +148,12 @@ public class Index5 {
         return flen;
     }
 
-//----------------------------------------------------------------------------  
-    boolean stopWord(String word) {
+   /**
+     * Checks if a word is a stop word.
+     * @param word Word to check.
+     * @return True if it's a stop word, otherwise false.
+     */
+   public boolean stopWord(String word) {
         if (word.equals("the") || word.equals("to") || word.equals("be") || word.equals("for") || word.equals("from") || word.equals("in")
                 || word.equals("a") || word.equals("into") || word.equals("by") || word.equals("or") || word.equals("and") || word.equals("that")) {
             return true;
@@ -157,9 +164,13 @@ public class Index5 {
         return false;
 
     }
-//----------------------------------------------------------------------------  
 
-    String stemWord(String word) { //skip for now
+    /**
+     * Applies stemming to a word (currently a placeholder).
+     * @param word Input word.
+     * @return Stemmed word.
+     */
+    public String stemWord(String word) { //skip for now
         return word;
 //        Stemmer s = new Stemmer();
 //        s.addString(word);
@@ -167,58 +178,67 @@ public class Index5 {
 //        return s.toString();
     }
 
-    //------------------Malak------------------------
-    Posting intersect(Posting pL1, Posting pL2) {
-///****  -1-   complete after each comment ****
-//   INTERSECT ( p1 , p2 )
-        //          1  answer ←      {}
-                Posting answer = null;
-                Posting last = null;
-        //      2 while p1  != NIL and p2  != NIL
-                while(pL1 != null && pL2 != null){
-        //          3 do if docID ( p 1 ) = docID ( p2 )
-                    if (pL1.docId == pL2.docId) {
-        //          4   then ADD ( answer, docID ( p1 ))
-                        // answer.add(pL1.docId);
-                        //posting is a linked list so move pointers to add new node
-                        Posting new_node = new Posting(pL1.docId);
-                        if (answer == null) {
-                            answer = new_node;
-                        }
-                        else {
-                            last.next = new_node;
-                        }
-                        last = new_node;
-        //          5       p1 ← next ( p1 )
-                        pL1 = pL1.next;
-        //          6       p2 ← next ( p2 )
-                        pL2 = pL2.next;
-                    }
-         //          7   else if docID ( p1 ) < docID ( p2 )
-                    else if(pL1.docId < pL2.docId) {
-        //          8        then p1 ← next ( p1 )
-                        pL1 = pL1.next;
-                    }
-                    else {
-        //          9        else p2 ← next ( p2 )
-                        pL2 = pL2.next;
-                    }
+    /**
+     * Intersects two posting lists and returns a new posting list
+     * containing document IDs that appear in both lists.
+     *
+     * @param pL1 The first posting list.
+     * @param pL2 The second posting list.
+     * @return A new posting list containing the intersection of pL1 and pL2.
+     */
+    public Posting intersect(Posting pL1, Posting pL2) {
+        // Initialize the resulting posting list
+        Posting answer = null;
+        Posting last = null; // Pointer to track the last node in the result list
+
+        // Traverse both lists until one of them reaches the end
+        while (pL1 != null && pL2 != null) {
+            // If both lists contain the same document ID, add it to the result
+            if (pL1.docId == pL2.docId) {
+                Posting new_node = new Posting(pL1.docId); // Create a new posting node
+
+                if (answer == null) {
+                    answer = new_node; // Initialize the result list
+                } else {
+                    last.next = new_node; // Append to the result list
                 }
-        //      10 return answer
-                return answer;
+                last = new_node; // Update the last pointer
+
+                // Move both pointers to the next node
+                pL1 = pL1.next;
+                pL2 = pL2.next;
+            }
+            // Move pL1 forward if its docId is smaller
+            else if (pL1.docId < pL2.docId) {
+                pL1 = pL1.next;
+            }
+            // Move pL2 forward if its docId is smaller
+            else {
+                pL2 = pL2.next;
+            }
+        }
+
+        // Return the intersected posting list
+        return answer;
     }
 
-    public String find_24_01(String phrase) { // any mumber of terms non-optimized search 
+    /**
+     * Finds documents containing all words in a phrase.
+     * @param phrase Input phrase.
+     * @return List of matching documents.
+     */
+    public String find_24_01(String phrase) { // any mumber of terms non-optimized search
         String result = "";
         String[] words = phrase.split("\\W+");
         int len = words.length;
-        
+
         //fix this if word is not in the hash table will crash...
         Posting posting = index.get(words[0].toLowerCase()).pList;
         int i = 1;
         while (i < len) {
             Boolean StopWord = stopWord(words[i]);
             if (StopWord) {
+                i++;
                 continue;
             }
             posting = intersect(posting, index.get(words[i].toLowerCase()).pList);
@@ -231,30 +251,37 @@ public class Index5 {
         }
         return result;
     }
-    
-    
-    //---------------------------------
-    String[] sort(String[] words) {  //bubble sort
-        boolean sorted = false;
-        String sTmp;
-        //-------------------------------------------------------
+
+
+    /**
+     * Sorts an array of words in lexicographical order using Bubble Sort.
+     * @param words Array of words to be sorted.
+     * @return Sorted array of words.
+     */
+    public String[] sort(String[] words) {
+        boolean sorted = false; // Flag to track if sorting is complete
+        String sTmp; // Temporary variable for swapping
+
+        // Bubble Sort algorithm
         while (!sorted) {
-            sorted = true;
+            sorted = true; // Assume sorted unless a swap is made
             for (int i = 0; i < words.length - 1; i++) {
-                int compare = words[i].compareTo(words[i + 1]);
-                if (compare > 0) {
+                int compare = words[i].compareTo(words[i + 1]); // Compare adjacent words
+                if (compare > 0) { // If words[i] is greater, swap
                     sTmp = words[i];
                     words[i] = words[i + 1];
                     words[i + 1] = sTmp;
-                    sorted = false;
+                    sorted = false; // Set flag to false since a swap was made
                 }
             }
         }
-        return words;
+        return words; // Return the sorted array
     }
 
-     //---------------------------------
-
+    /**
+     * Stores the index to a file.
+     * @param storageName Filename for storing the index.
+     */
     public void store(String storageName) {
         try {
             String pathToStorage = "C:\\Users\\Ahmed\\Desktop\\My Projects\\Information Retrieval\\is322_HW_1\\is322_HW_1\\"+storageName+".txt";
@@ -292,66 +319,114 @@ public class Index5 {
             e.printStackTrace();
         }
     }
-//=========================================    
-    public boolean storageFileExists(String storageName){
-        java.io.File f = new java.io.File("/home/ehab/tmp11/rl/"+storageName);
-        if (f.exists() && !f.isDirectory())
-            return true;
-        return false;
-            
+
+    /**
+     * Checks whether a storage file exists in the specified directory.
+     *
+     * @param storageName The name of the storage file to check.
+     * @return true if the file exists and is not a directory, false otherwise.
+     */
+    public boolean storageFileExists(String storageName) {
+        // Construct the file path by appending the storage name to the directory path
+        java.io.File f = new java.io.File("/home/ehab/tmp11/rl/" + storageName);
+
+        // Check if the file exists and is not a directory
+        if (f.exists() && !f.isDirectory()) {
+            return true; // File exists
+        }
+        return false; // File does not exist or is a directory
     }
-//----------------------------------------------------    
+
+    /**
+     * Creates a new storage file with the specified name.
+     *
+     * @param storageName The name of the storage file to create.
+     */
     public void createStore(String storageName) {
         try {
-            String pathToStorage = "/home/ehab/tmp11/"+storageName;
+            // Define the full file path where the storage file will be created
+            String pathToStorage = "/home/ehab/tmp11/" + storageName;
+
+            // Create a FileWriter to write to the specified file
             Writer wr = new FileWriter(pathToStorage);
+
+            // Write the string "end" followed by a newline character to the file
             wr.write("end" + "\n");
+
+            // Close the writer to ensure data is saved and resources are released
             wr.close();
-            
         } catch (Exception e) {
+            // Print the stack trace in case of an error during file creation
             e.printStackTrace();
         }
     }
-//----------------------------------------------------      
-     //load index from hard disk into memory
+
+    /**
+     * Loads an index from a storage file into memory.
+     *
+     * @param storageName The name of the storage file to load.
+     * @return A HashMap representing the inverted index.
+     */
     public HashMap<String, DictEntry> load(String storageName) {
         try {
-            String pathToStorage = "/home/ehab/tmp11/rl/"+storageName;         
-            sources = new HashMap<Integer, SourceRecord>();
-            index = new HashMap<String, DictEntry>();
+            // Construct the full path to the storage file
+            String pathToStorage = "/home/ehab/tmp11/rl/" + storageName;
+
+            // Initialize sources and index maps
+            sources = new HashMap<>();
+            index = new HashMap<>();
+
+            // Open the file for reading
             BufferedReader file = new BufferedReader(new FileReader(pathToStorage));
+
             String ln = "";
             int flen = 0;
+
+            // Read the first section of the file (Source Records)
             while ((ln = file.readLine()) != null) {
+                // Check for the section separator
                 if (ln.equalsIgnoreCase("section2")) {
                     break;
                 }
+
+                // Split the line by commas to extract fields
                 String[] ss = ln.split(",");
                 int fid = Integer.parseInt(ss[0]);
+
                 try {
+                    // Print debug info (document details)
                     System.out.println("**>>" + fid + " " + ss[1] + " " + ss[2].replace('~', ',') + " " + ss[3] + " [" + ss[4] + "]   " + ss[5].replace('~', ','));
 
+                    // Create a SourceRecord object and store it in sources map
                     SourceRecord sr = new SourceRecord(fid, ss[1], ss[2].replace('~', ','), Integer.parseInt(ss[3]), Double.parseDouble(ss[4]), ss[5].replace('~', ','));
-                    //   System.out.println("**>>"+fid+" "+ ss[1]+" "+ ss[2]+" "+ ss[3]+" ["+ Double.parseDouble(ss[4])+ "]  \n"+ ss[5]);
                     sources.put(fid, sr);
                 } catch (Exception e) {
-
                     System.out.println(fid + "  ERROR  " + e.getMessage());
                     e.printStackTrace();
                 }
             }
+
+            // Read the second section of the file (Inverted Index)
             while ((ln = file.readLine()) != null) {
-                //     System.out.println(ln);
+                // Check for the end of the file
                 if (ln.equalsIgnoreCase("end")) {
                     break;
                 }
+
+                // Split the line into dictionary entry and postings list
                 String[] ss1 = ln.split(";");
-                String[] ss1a = ss1[0].split(",");
-                String[] ss1b = ss1[1].split(":");
+                String[] ss1a = ss1[0].split(","); // Dictionary entry
+                String[] ss1b = ss1[1].split(":"); // Posting list
+
+                // Create and store the dictionary entry
                 index.put(ss1a[0], new DictEntry(Integer.parseInt(ss1a[1]), Integer.parseInt(ss1a[2])));
-                String[] ss1bx;   //posting
+
+                // Process the posting list
+                String[] ss1bx;
                 for (int i = 0; i < ss1b.length; i++) {
                     ss1bx = ss1b[i].split(",");
+
+                    // Add a new posting to the list
                     if (index.get(ss1a[0]).pList == null) {
                         index.get(ss1a[0]).pList = new Posting(Integer.parseInt(ss1bx[0]), Integer.parseInt(ss1bx[1]));
                         index.get(ss1a[0]).last = index.get(ss1a[0]).pList;
@@ -361,13 +436,18 @@ public class Index5 {
                     }
                 }
             }
+
+            // Indicate that loading is complete
             System.out.println("============= END LOAD =============");
-            //    printDictionary();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // Return the loaded index
         return index;
     }
+
 }
 
 //=====================================================================

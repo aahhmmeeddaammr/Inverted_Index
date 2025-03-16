@@ -1,0 +1,9 @@
+0,C:\tmp11\rl\collection\doc1.txt,C:\tmp11\rl\collection\doc1.txt,7,0.0000,notext
+1,C:\tmp11\rl\collection\doc2.txt,C:\tmp11\rl\collection\doc2.txt,3,0.0000,notext
+section2
+running,1,1;0,1:
+ahmed,2,2;0,1:1,1:
+amr,1,1;0,1:
+joo,1,1;1,1:
+khalid,2,2;0,1:1,1:
+end
